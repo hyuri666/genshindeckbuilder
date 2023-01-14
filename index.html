@@ -1,0 +1,676 @@
+<html>
+  <head>
+    <style>
+      #imageCards {
+        display: flex;
+        flex-wrap: wrap;
+        max-width: 1800px;
+      }
+      .card {
+        box-sizing: border-box;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+        position: relative;
+        width: 10%;
+      }
+      .card img {
+        width: 100%;
+      }
+      .card p {
+        margin: 0;
+		font-size:15px;
+      }
+      #selected-cards {
+        display: flex;
+        flex-wrap: wrap;
+        max-width: 1800px;
+      }
+      /* Add styles for selected cards */
+      .card[data-selected="true"] {
+        opacity: 0.5;
+      }
+      /* Add styles for twice-selected cards */
+      .card[data-selected="2"] {
+        opacity: 0.2;
+      }
+      /* Add styles for the selected card display below */
+      .selected-card {
+        width: 9%;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+position: relative;
+margin: 0px;
+}
+/* Add styles for the selected count display on selected cards */
+.selected-count {
+position: absolute;
+top: 10px;
+right: 10px;
+background-color: rgb(255, 255, 128);
+padding: 5px;
+border-radius: 5px;
+font-weight: bold;
+}
+
+</style>
+
+  </head>
+  <body>
+    <!-- A div to hold the table and make it scroll horizontally -->
+    <div class="table-wrapper">
+      <!-- A table to display the available images and text -->
+	    <!-- Filter input field -->
+  <input
+    type="text"
+    id="filter-title"
+    oninput="filterImagesByTitle(this.value)"
+  />
+
+
+<script>
+  function filterImagesByTitle(filter) {
+    // Get all the images in the original cards container
+    var images = document.querySelectorAll("#imageCards img:not([data-selected='true'])");
+
+    // Loop through the images
+    for (var i = 0; i < images.length; i++) {
+      // Get the title of the current image
+      var title = images[i].getAttribute("title");
+
+      // If the filter is empty or the title of the image contains the filter
+      if (!filter || title.toLowerCase().includes(filter.toLowerCase())) {
+        // Show the image and its parent container element
+        images[i].style.display = "inline-block";
+        images[i].parentElement.style.display = "block";
+      } else {
+        // Hide the image and its parent container element
+        images[i].style.display = "none";
+        images[i].parentElement.style.display = "none";
+      }
+    }
+  }
+</script>
+
+<script>
+  function filterImages(filter) {
+    var images = document.querySelectorAll("#imageCards img:not([data-selected='true'])");
+    // Loop through the images
+    for (var i = 0; i < images.length; i++) {
+      // Check if the filter is "all"
+      if (filter === "all") {
+        // Show all the images
+        images[i].style.display = "inline-block";
+        images[i].parentElement.style.display = "block";
+      } else if (images[i].dataset.tags.includes(filter)) {
+        // If the image has the filter in its data-tags attribute
+        // Show the image and its parent container element
+        images[i].style.display = "inline-block";
+        images[i].parentElement.style.display = "block";
+      } else {
+        // Hide the image and its parent container element
+        images[i].style.display = "none";
+        images[i].parentElement.style.display = "none";
+      }
+    }
+  }
+</script>
+
+<div id="filters">
+    <button data-filter="all">All</button>
+    <button data-filter="characters">Characters</button>
+    <button data-filter="equips">Equips</button>
+    <button data-filter="weapons">Weapons</button>
+    <button data-filter="artifacts">Artifacts</button>
+	<button data-filter="foods">Foods</button>
+    <button data-filter="events">Events</button>
+    <button data-filter="supports">Supports</button>
+    <label for="cost-filter">Cost:</label>
+    <select id="cost-filter">
+        <option value="all">All</option>
+        <option value="0">0</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+    </select>
+    <label for="type-filter">Type:</label>
+    <select id="type-filter">
+        <option value="all">All</option>
+        <option value="anemo">Anemo</option>
+        <option value="cryo">Cryo</option>
+        <option value="dendro">Dendro</option>
+        <option value="electro">Electro</option>
+		<option value="geo">Geo</option>
+		<option value="hydro">Hydro</option>
+		<option value="pyro">Pyro</option>
+		<option value="hydro">Hydro</option>
+    </select>
+</div>
+
+
+
+<script>
+// Get the filters container element
+var filters = document.getElementById("filters");
+    // Listen for clicks on the filters
+    filters.addEventListener("click", function (event) {
+      // If the clicked element is a button
+      if (event.target.tagName === "BUTTON") {
+        // Get the data-filter attribute of the button
+        var filter = event.target.dataset.filter;
+        // Call the filterImages function and pass in the filter
+        filterImages(filter);
+      }
+    });
+  </script>
+
+<script src='https://html2canvas.hertzen.com/dist/html2canvas.min.js'></script>
+<script>
+  function takeScreenshot() {
+    // Select the div you want to take a screenshot of
+    var screenshotDiv = document.getElementById("screenshot-div");
+    
+    html2canvas(screenshotDiv).then(canvas => {
+      // Create an image from the canvas
+      var screenshotImg = new Image();
+      screenshotImg.src = canvas.toDataURL();
+      
+      // Create a link to download the image
+      var downloadLink = document.createElement("a");
+      downloadLink.download = "screenshot.png";
+      downloadLink.href = screenshotImg.src;
+      downloadLink.click();
+    });
+  }
+</script>
+  <div id="imageCards"></div>
+<button onclick="takeScreenshot()">Take Screenshot</button>
+<div id="screenshot-div">
+  <div id="selected-cards"></div>
+<div id="counter"></div>
+
+</div>
+
+
+
+
+  <script>
+       var selectedCards = {};
+		
+		
+var characterCount = 0;
+var otherCount = 0;
+var counter = document.getElementById("counter");
+
+function toggleSelected(card) {
+    var id = card.getAttribute("data-id");
+    var selectedCount = selectedCards[id] ? selectedCards[id].count : 0;
+
+    // Update the count for the selected card
+    selectedCards[id] = {
+      count: selectedCount + 1,
+      card: card,
+	  
+    };
+
+    if (card.getAttribute("data-tags") === "characters") {
+      if (selectedCount === 0) {
+        card.setAttribute("data-selected", "true");
+        displaySelectedCard(id);
+        characterCount++;
+      } else {
+        card.setAttribute("data-selected", "false");
+        hideSelectedCard(id);
+        delete selectedCards[id];
+        characterCount--;
+      }
+    } else {
+      if (selectedCount === 0) {
+        card.setAttribute("data-selected", "true");
+        displaySelectedCard(id);
+        otherCount++;
+      } else if (selectedCount === 1) {
+        card.setAttribute("data-selected", "2");
+        updateSelectedCard(id);
+        otherCount++;
+      } else {
+        card.setAttribute("data-selected", "false");
+        hideSelectedCard(id);
+        delete selectedCards[id];
+        otherCount=otherCount-2; 
+      }
+    }
+    console.log("Character count: " + characterCount);
+    console.log("Other count: " + otherCount);
+	
+	 if (characterCount > 3) {
+        console.log("MAX Character count: " + characterCount);
+		counter.innerHTML = "characters :"+ characterCount + "/3 " + "       others :" + otherCount + "/30";
+        return;
+    }
+    if (otherCount > 30) {
+        console.log("MAX Other count: " + otherCount);
+        counter.innerHTML = "characters :"+ characterCount + "/3 " + "       others :" + otherCount + "/30";
+        return;
+    }
+    counter.innerHTML = "characters :"+ characterCount + "/3 " + "       others :" + otherCount + "/30";
+  }
+
+
+
+
+    var selectedCardArray = [];
+    
+	function displaySelectedCard(id) {
+  var selectedCard = selectedCards[id].card.cloneNode(true);
+  selectedCard.classList.add("selected-card");
+  selectedCard.setAttribute("data-id", id);
+  selectedCard.removeAttribute("data-selected");
+
+  // Add a selected count display
+  var count = document.createElement("div");
+  count.classList.add("selected-count");
+  count.innerHTML = "1";
+  selectedCard.appendChild(count);
+
+  // Add the selected card to the selected cards container
+  document.getElementById("selected-cards").appendChild(selectedCard);
+  
+  // Add event listener to the image to handle clicks
+  selectedCard.querySelector("img").addEventListener("click", function() {
+    toggleSelected(selectedCards[id].card);
+  });
+
+
+  // Add the selected card to the selected cards container
+  var selectedCardsContainer = document.getElementById("selected-cards");
+  var childCards = selectedCardsContainer.children;
+  var added = false;
+  for (var i = 0; i < childCards.length; i++) {
+    if (parseInt(id) < parseInt(childCards[i].getAttribute("data-id"))) {
+      selectedCardsContainer.insertBefore(selectedCard, childCards[i]);
+      added = true;
+      break;
+    }
+  }
+  if (!added) {
+    selectedCardsContainer.appendChild(selectedCard);
+  }
+}
+
+
+// Get all the card images
+var cardImages = document.getElementsByClassName("card-image");
+
+// Add an event listener to each image that triggers the toggleSelected function when clicked
+for (var i = 0; i < cardImages.length; i++) {
+  cardImages[i].addEventListener("click", function(event) {
+    var card = event.target.parentNode;
+    toggleSelected(card);
+  });
+}
+
+
+    function updateSelectedCard(id) {
+      var selectedCard = document.querySelector(
+        `.selected-card[data-id="${id}"]`
+      );
+      var count = selectedCard.querySelector(".selected-count");
+      count.innerHTML = "2";
+    }
+
+    function hideSelectedCard(id) {
+      var selectedCard = document.querySelector(
+        `.selected-card[data-id="${id}"]`
+      );
+      selectedCard.remove();
+    }
+
+    var cards = [
+      {
+        id: 1,
+		url: "character/Jean.png",
+	title: "Jean",
+	tags: "characters",
+	costsame:"1",
+	cost:"5",
+	type:"anemo",
+	charge:"3",
+	hp:"10"
+	
+		},
+	{
+		id: 2,
+		url: "character/KamisatoAyaka.png",
+		title: "KamisatoAyaka",
+		tags: "characters",
+		cost:"3",
+		costsame:"0",
+		type:"cryo",
+		charge:"3",
+		hp:"10"
+		
+	},
+{
+		id: 3,
+		url: "character/GAnyu.png",
+		title: "Ganyu",
+		tags: "characters",
+		cost:"3",
+		costsame:"0",
+		type:"cryo",
+		charge:"3",
+		hp:"10"
+},
+{
+		id: 4,
+		url: "equip/Adventurer's Bandana.png",
+	title: "Adventurer's Bandana",
+	tags: "equips,artifacts",
+	cost:"2",
+	costsame:"0",
+	type:"none",
+	charge:"0"
+},
+{
+		id: 5,
+		url: "equip/Aquila Favonia.png",
+	title: "Aquila Favonia",
+	tags: "equips,weapons",
+	cost:"3",
+	costsame:"1",
+	type:"none",
+	charge:"0"
+},
+{
+		id: 6,
+		url: "event/Abyssal Summons.png",
+	title: "Abyssal Summons",
+	tags: "events",
+	cost:"2",
+	costsame:"1",
+	type:"none",
+	charge:"0"
+},
+{
+		id: 7,
+		url: "event/Adeptus' Temptation.png",
+	title: "Adeptus' Temptation",
+	tags: "events,foods",
+	cost:"1",
+	costsame:"1",
+	type:"none",
+	charge:"0"
+},
+{
+		id: 8,
+		url: "support/Chang the Ninth.png",
+	title: "Chang the Ninth",
+	tags: "supports",
+	cost:"1",
+	costsame:"1",
+	type:"none",
+	charge:"0"
+},
+{
+		id: "9",
+		url: "support/Chef Mao.png",
+	title: "Chef Mao",
+	tags: "supports",
+	cost:"1",
+	costsame:"1",
+	type:"none",
+	charge:"0"
+},
+{
+		id: "10",
+		url: "support/Dawn Winery.png",
+	title: "Dawn Winery",
+	tags: "supports",
+	cost:"2",
+	costsame:"1",
+	type:"none",
+	charge:"0"
+},
+{
+		id: "11",
+		url: "support/Ellin.png",
+	title: "Ellin",
+	tags: "supports",
+	cost:"2",
+	costsame:"1",
+	type:"none",
+	charge:"0"
+},
+{
+		id: "12",
+		url: "equip/Archaic Petra.png",
+	title: "Archaic Petra",
+	tags: "equips,artifacts",
+	cost:"3",
+	costsame:"1",
+	type:"none",
+	charge:"0"
+},
+{
+		id: "13",
+		url: "equip/Awakening.png",
+	title: "Awakening",
+	tags: "equips,characters",
+	cost:"4",
+	costsame:"1",
+	type:"electro",
+	charge:"0"
+},
+
+
+];
+
+
+    // Create the cards
+    for (var i = 0; i < cards.length; i++) {
+      var card = document.createElement("div");
+      card.classList.add("card");
+      card.setAttribute("data-selected", "false");
+      card.setAttribute("data-id", cards[i].id);
+      card.addEventListener("click", function () {
+        toggleSelected(this);
+		
+      });
+      var img = document.createElement("img");
+      img.src = cards[i].url;
+      img.alt = cards[i].title;
+      img.title = cards[i].title;
+      img.dataset.tags = cards[i].tags;
+	  card.setAttribute("data-tags", cards[i].tags);
+      card.appendChild(img);
+      var p = document.createElement("p");
+      p.innerHTML = cards[i].title;
+      card.appendChild(p);
+
+		        // Create the costsame element
+      var costsameEl = document.createElement("div");
+      var costsameNumber = document.createElement("p");
+      costsameNumber.textContent = cards[i].costsame;
+      costsameEl.appendChild(costsameNumber);
+	  
+      // Create the cost element
+      var costEl = document.createElement("div");
+      var costNumber = document.createElement("p");
+      costNumber.textContent = cards[i].cost;
+      costEl.appendChild(costNumber);
+	  
+
+	  
+      
+      if (cards[i].type === "pyro") {
+        costEl.style.backgroundImage = "url('pyro.png')";
+      } else if (cards[i].type === "hydro") {
+        costEl.style.backgroundImage = "url('hydro.png')";
+      } else if (cards[i].type === "anemo") {
+        costEl.style.backgroundImage = "url('./anemo.png')";
+      } else if (cards[i].type === "geo") {
+        costEl.style.backgroundImage = "url('geo.png')";
+      } else if (cards[i].type === "electro") {
+        costEl.style.backgroundImage = "url('electro.png')";
+      } else if (cards[i].type === "dendro") {
+        costEl.style.backgroundImage = "url('dendro.png')";
+      } else if (cards[i].type === "cryo") {
+        costEl.style.backgroundImage = "url('cryo.png')";
+      }else if (cards[i].type === "none" && cards[i].costsame === '0') {
+        costEl.style.backgroundImage = "url('none0.png')";
+      } else if (cards[i].type === "none" && cards[i].costsame === '1') {
+        costEl.style.backgroundImage = "url('none1.png')";
+      }
+      
+      costEl.style.position = "absolute";
+	  costEl.style.backgroundSize = "100% 100%";
+      costEl.style.top = "2px";
+      costEl.style.left = "2px";
+      costEl.style.width = "40px";
+      costEl.style.height = "40px";
+	  costEl.style.zIndex = "1";
+	
+	   
+       card.appendChild(costEl);
+	   costNumber.style.position = "absolute";
+	costNumber.style.top = "50%";
+	costNumber.style.left = "50%";
+	costNumber.style.transform = "translate(-50%,-50%)";
+	     costNumber.style.fontWeight= "bold";
+	   	      // Create the hp element
+      var hpEl = document.createElement("div");
+      var hpNumber = document.createElement("p");
+      hpNumber.textContent = cards[i].hp;
+      hpEl.appendChild(hpNumber);
+
+      hpEl.style.position = "absolute";
+      hpEl.style.top = "40px";
+      hpEl.style.left = "2px";
+      hpEl.style.width = "40px";
+      hpEl.style.height = "40px";
+      hpEl.style.zIndex = "2";
+	  if(cards[i].hp > 0){
+	  card.appendChild(hpEl);
+	  }
+      hpEl.style.backgroundSize = "100% 100%";
+	  hpEl.style.backgroundImage = "url('hp.png')";
+	  hpNumber.style.fontSize = "15px";
+      hpNumber.style.position = "absolute";
+      hpNumber.style.top = "50%";
+      hpNumber.style.left = "50%";
+      hpNumber.style.transform = "translate(-50%,-50%)";
+	  hpNumber.style.fontWeight= "bold";
+	   
+	   
+      document.getElementById("imageCards").appendChild(card);
+	  
+	   
+	      // Create the charge element
+      var chargeEl = document.createElement("div");
+      var chargeNumber = document.createElement("p");
+      chargeNumber.textContent = cards[i].charge;
+      chargeEl.appendChild(chargeNumber);
+
+      chargeEl.style.position = "absolute";
+      chargeEl.style.top = "75px";
+      chargeEl.style.left = "2px";
+      chargeEl.style.width = "40px";
+      chargeEl.style.height = "40px";
+      chargeEl.style.zIndex = "2";
+	  if(cards[i].charge > 0){
+	  card.appendChild(chargeEl);
+	  }
+      chargeEl.style.backgroundSize = "100% 100%";
+	  chargeEl.style.backgroundImage = "url('recharge.png')";
+	  chargeNumber.style.fontSize = "15px";
+      chargeNumber.style.position = "absolute";
+      chargeNumber.style.top = "50%";
+      chargeNumber.style.left = "50%";
+      chargeNumber.style.transform = "translate(-50%,-50%)";
+	  chargeNumber.style.fontWeight= "bold";
+	   
+      document.getElementById("imageCards").appendChild(card);
+	  
+	  	   
+
+	  
+    }
+
+
+
+  </script>
+  
+<script>
+
+function filterCardsByCost(cost) {
+  // Get all the cards
+  var costcards = document.querySelectorAll("#imageCards .card");
+
+  // Loop through the cards
+  for (var i = 0; i < costcards.length; i++) {
+    // Get the cost of the current card
+	    var cardCost = cards[i].cost;
+    // If the filter is empty or the cost of the card matches the filter
+    if (!cost || cardCost === cost) {
+      // Show the card
+	  console.log("show costfilter");
+      costcards[i].style.display = "block";
+    }
+	else if(cost === "all"){
+	//console.log("all");
+	costcards[i].style.display = "block";
+	}
+	else {
+      // Hide the card
+	  console.log("hidefilter");
+      costcards[i].style.display = "none";
+    }
+  }
+}
+document.getElementById("cost-filter").addEventListener("change", function(){
+  filterCardsByCost(this.value);
+});
+
+</script>
+<script>
+function filterCardsByType(type) {
+  // Get all the cards
+  var typecards = document.querySelectorAll("#imageCards .card");
+
+  // Loop through the cards
+  for (var i = 0; i < typecards.length; i++) {
+    // Get the type of the current card
+	    var cardType = cards[i].type;
+    // If the filter is empty or the type of the card matches the filter
+    if (!type || cardType === type) {
+      // Show the card
+	  console.log("show typefilter");
+      typecards[i].style.display = "block";
+    }
+	else if(type === "all"){
+	//console.log("all");
+	typecards[i].style.display = "block";
+	}
+	else {
+      // Hide the card
+	  console.log("hidefilter");
+      typecards[i].style.display = "none";
+    }
+  }
+}
+document.getElementById("type-filter").addEventListener("change", function(){
+  filterCardsByType(this.value);
+});
+
+
+</script>
+
+</div>
+  </body>
+</html>
