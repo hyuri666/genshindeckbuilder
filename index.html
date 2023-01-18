@@ -38,6 +38,7 @@
       /* Add styles for the selected card display below */
       .selected-card {
         width: 9%;
+		    background-color:white;
         padding: 20px;
         border: 1px solid #ccc;
         border-radius: 5px;
@@ -56,21 +57,87 @@ border-radius: 5px;
 font-weight: bold;
 }
 
+.transparent{
+    background-color:transparent;
+}
+.green{
+    background-color:green;
+}
+
+
+
+input::placeholder {
+  color: lightgray;
+}
+input:focus::placeholder {
+  color: black;
+}
 </style>
 
   </head>
   <body>
+
+
+
+<button onclick="SaveScreenshot()">Take Screenshot</button>
+<button id="transparent-button">Transparent</button>
+<button id="green-button">Toggle Green</button>
+<div id="target-div">
+<div id="screenshot-div">
+  <div id="selected-cards"></div>
+<div id="counter"></div>
+
+</div></div>
+
+</div>
     <!-- A div to hold the table and make it scroll horizontally -->
     <div class="table-wrapper">
       <!-- A table to display the available images and text -->
 	    <!-- Filter input field -->
-  <input
-    type="text"
-    id="filter-title"
-    oninput="filterImagesByTitle(this.value)"
-  />
+  <input type="text" id="filter-title" placeholder="Enter a card name"
+    oninput="filterImagesByTitle(this.value)"/>
+	<div id="filters">
+    <button data-filter="all">All</button>
+    <button data-filter="characters">Characters</button>
+    <button data-filter="equips">Equips</button>
+    <button data-filter="weapons">Weapons</button>
+    <button data-filter="artifacts">Artifacts</button>
+	<button data-filter="foods">Foods</button>
+	<button data-filter="resonance">Resonance</button>
+    <button data-filter="events">Events</button>
+    <button data-filter="supports">Supports</button>
+    <label for="cost-filter">Cost:</label>
+    <select id="cost-filter">
+        <option value="all">All</option>
+        <option value="0">0</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+    </select>
+    <label for="type-filter">Type:</label>
+    <select id="type-filter">
+        <option value="all">All</option>
+        <option value="anemo">Anemo</option>
+        <option value="cryo">Cryo</option>
+        <option value="dendro">Dendro</option>
+        <option value="electro">Electro</option>
+		<option value="geo">Geo</option>
+		<option value="hydro">Hydro</option>
+		<option value="pyro">Pyro</option>
+		<option value="hydro">Hydro</option>
+    </select>
+</div>
+  <div id="imageCards"></div>
 
 
+
+<script>
+document.getElementById("filter-title").addEventListener("focus", function(){
+  this.value = "";
+});
+</script>
 <script>
   function filterImagesByTitle(filter) {
     // Get all the images in the original cards container
@@ -118,42 +185,6 @@ font-weight: bold;
     }
   }
 </script>
-
-<div id="filters">
-    <button data-filter="all">All</button>
-    <button data-filter="characters">Characters</button>
-    <button data-filter="equips">Equips</button>
-    <button data-filter="weapons">Weapons</button>
-    <button data-filter="artifacts">Artifacts</button>
-	<button data-filter="foods">Foods</button>
-    <button data-filter="events">Events</button>
-    <button data-filter="supports">Supports</button>
-    <label for="cost-filter">Cost:</label>
-    <select id="cost-filter">
-        <option value="all">All</option>
-        <option value="0">0</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-    </select>
-    <label for="type-filter">Type:</label>
-    <select id="type-filter">
-        <option value="all">All</option>
-        <option value="anemo">Anemo</option>
-        <option value="cryo">Cryo</option>
-        <option value="dendro">Dendro</option>
-        <option value="electro">Electro</option>
-		<option value="geo">Geo</option>
-		<option value="hydro">Hydro</option>
-		<option value="pyro">Pyro</option>
-		<option value="hydro">Hydro</option>
-    </select>
-</div>
-
-
-
 <script>
 // Get the filters container element
 var filters = document.getElementById("filters");
@@ -188,17 +219,22 @@ var filters = document.getElementById("filters");
     });
   }
 </script>
-  <div id="imageCards"></div>
-<button onclick="takeScreenshot()">Take Screenshot</button>
-<div id="screenshot-div">
-  <div id="selected-cards"></div>
-<div id="counter"></div>
-
-</div>
 
 
 
+ <script>
+ var targetDiv = document.getElementById("target-div");
+var transparentButton = document.getElementById("transparent-button");
+var greenButton = document.getElementById("green-button");
+transparentButton.addEventListener("click", function() {
+  targetDiv.classList.toggle("transparent");
+});
+greenButton.addEventListener("click", function() {
+  targetDiv.classList.toggle("green");
+});
 
+ </script>
+ 
   <script>
        var selectedCards = {};
 		
@@ -245,16 +281,16 @@ function toggleSelected(card) {
         otherCount=otherCount-2; 
       }
     }
-    console.log("Character count: " + characterCount);
-    console.log("Other count: " + otherCount);
 	
 	 if (characterCount > 3) {
-        console.log("MAX Character count: " + characterCount);
+       alert("You have too many characters cards");
+
 		counter.innerHTML = "characters :"+ characterCount + "/3 " + "       others :" + otherCount + "/30";
         return;
     }
     if (otherCount > 30) {
-        console.log("MAX Other count: " + otherCount);
+        alert("You have too many cards");
+
         counter.innerHTML = "characters :"+ characterCount + "/3 " + "       others :" + otherCount + "/30";
         return;
     }
@@ -330,45 +366,701 @@ for (var i = 0; i < cardImages.length; i++) {
       );
       selectedCard.remove();
     }
-
+	  </script>
+  <script>//CARDS
     var cards = [
-      {
+      
+	 {
         id: 1,
-		url: "character/Jean.png",
-	title: "Jean",
+		url: "character/Barbara.png",
+	title: "Barbara",
 	tags: "characters",
 	costsame:"1",
-	cost:"5",
-	type:"anemo",
+	cost:"3",
+	type:"hydro",
 	charge:"3",
 	hp:"10"
 	
 		},
-	{
-		id: 2,
-		url: "character/KamisatoAyaka.png",
-		title: "KamisatoAyaka",
-		tags: "characters",
-		cost:"3",
-		costsame:"0",
-		type:"cryo",
-		charge:"3",
-		hp:"10"
-		
-	},
-{
-		id: 3,
+		{
+        id: 1.1,
+		url: "equip/Glorious Season.png",
+	title: "Barbara/Glorious Season",
+	tags: "characters/equips",
+	costsame:"1",
+	cost:"4",
+	type:"hydro",
+	charge:"",
+	hp:"0"
+	
+		},
+		 {
+        id: 1.5,
+		url: "character/Beidou.png",
+	title: "Beidou",
+	tags: "characters",
+	costsame:"1",
+	cost:"3",
+	type:"electro",
+	charge:"3",
+	hp:"10"
+	
+		},
+		{
+        id: 1.6,
+		url: "equip/Lightning Storm.png",
+	title: "Beidou/Lightning Storm",
+	tags: "characters/equips",
+	costsame:"1",
+	cost:"3",
+	type:"electro",
+	charge:"",
+	hp:"0"
+	
+		},
+		{
+        id: 2,
+		url: "character/Bennett.png",
+	title: "Bennett",
+	tags: "characters",
+	costsame:"1",
+	cost:"4",
+	type:"pyro",
+	charge:"2",
+	hp:"10"
+	
+		},
+		{
+        id: 2.1,
+		url: "equip/Grand Expectation.png",
+	title: "Bennett/Grand Expectation",
+	tags: "characters/equips",
+	costsame:"1",
+	cost:"4",
+	type:"pyro",
+	charge:"2",
+	hp:"0"
+	
+		},
+		{
+        id: 3,
+		url: "character/Chongyun.png",
+	title: "Chongyun",
+	tags: "characters",
+	costsame:"1",
+	cost:"3",
+	type:"cryo",
+	charge:"3",
+	hp:"10"
+		},
+		{
+        id: 3.1,
+		url: "equip/Steady Breathing.png",
+	title: "Chongyun/Steady Breathing",
+	tags: "characters/equips",
+	costsame:"1",
+	cost:"4",
+	type:"cryo",
+	charge:"0",
+	hp:"0"
+	
+		},
+		{
+        id: 4,
+		url: "character/Collei.png",
+	title: "Collei",
+	tags: "characters",
+	costsame:"1",
+	cost:"3",
+	type:"dendro",
+	charge:"2",
+	hp:"10"
+	
+		},
+		{
+        id: 4.1,
+		url: "equip/Floral Sidewinder.png",
+	title: "Collei/Floral Sidewinder",
+	tags: "characters/equips",
+	costsame:"1",
+	cost:"4",
+	type:"dendro",
+	charge:"0",
+	hp:"0"
+	
+		},
+		{
+        id: 5,
+		url: "character/Cyno.png",
+	title: "Cyno",
+	tags: "characters",
+	costsame:"1",
+	cost:"4",
+	type:"electro",
+	charge:"2",
+	hp:"10"
+		},
+		{
+        id: 5.1,
+		url: "equip/Featherfall Judgment.png",
+	title: "Featherfall Judgment",
+	tags: "characters/equips",
+	costsame:"1",
+	cost:"3",
+	type:"electro",
+	charge:"0",
+	hp:"0"
+	
+		},
+		{
+        id: 6,
+		url: "character/Diluc.png",
+	title: "Diluc",
+	tags: "characters",
+	costsame:"1",
+	cost:"4",
+	type:"pyro",
+	charge:"3",
+	hp:"10"
+		},
+		{
+        id: 6.1,
+		url: "equip/Flowing Flame.png",
+	title: "Diluc/Flowing Flame",
+	tags: "characters/equips",
+	costsame:"1",
+	cost:"3",
+	type:"pyro",
+	charge:"0",
+	hp:"0"
+	
+		},
+		{
+        id: 7,
+		url: "character/Diona.png",
+	title: "Diona",
+	tags: "characters",
+	costsame:"1",
+	cost:"3",
+	type:"cryo",
+	charge:"3",
+	hp:"10"
+	
+		},
+		{
+        id: 7.1,
+		url: "equip/Shaken, Not Purred.png",
+	title: "Diona/Shaken, Not Purred",
+	tags: "characters/equips",
+	costsame:"1",
+	cost:"4",
+	type:"cryo",
+	charge:"",
+	hp:"0"
+	
+		},
+		{
+        id: 8,
+		url: "character/Fatui Pyro Agent.png",
+	title: "Fatui Pyro Agent",
+	tags: "characters",
+	costsame:"1",
+	cost:"3",
+	type:"pyro",
+	charge:"2",
+	hp:"10"
+	
+		},
+		{
+        id: 8.1,
+		url: "equip/Paid in Full.png",
+	title: "Fatui Pyro Agent/Paid in Full",
+	tags: "characters/equips",
+	costsame:"1",
+	cost:"3",
+	type:"pyro",
+	charge:"0",
+	hp:"0"
+	
+		},
+		{
+        id: 9,
+		url: "character/Fischl.png",
+	title: "Fischl",
+	tags: "characters",
+	costsame:"1",
+	cost:"3",
+	type:"electro",
+	charge:"3",
+	hp:"10"
+		},
+		{
+        id: 9.1,
+		url: "equip/Stellar Predator.png",
+	title: "Fischl/Stellar Predator",
+	tags: "characters/equips",
+	costsame:"1",
+	cost:"3",
+	type:"electro",
+	charge:"0",
+	hp:"0"
+	
+		},
+		{
+		id: 10,
 		url: "character/Ganyu.png",
 		title: "Ganyu",
 		tags: "characters",
 		cost:"3",
 		costsame:"0",
 		type:"cryo",
-		charge:"3",
+		charge:"2",
 		hp:"10"
-},
-{
-		id: 4,
+		},
+		{
+        id: 10.1,
+		url: "equip/Undivided Heart.png",
+	title: "Ganyu/Undivided Heart",
+	tags: "characters/equips",
+	costsame:"1",
+	cost:"5",
+	type:"cryo",
+	charge:"0",
+	hp:"0"
+	
+		},
+		{
+        id: 11,
+		url: "character/Jadeplume Terrorshroom.png",
+	title: "Jadeplume Terrorshroom",
+	tags: "characters",
+	costsame:"1",
+	cost:"3",
+	type:"dendro",
+	charge:"2",
+	hp:"10"
+	
+		},
+		{
+        id: 11.1,
+		url: "equip/Proliferating Spores.png",
+	title: "Jadeplume Terrorshroom/Proliferating Spores",
+	tags: "characters/equips",
+	costsame:"1",
+	cost:"3",
+	type:"dendro",
+	charge:"0",
+	hp:"0"
+	
+		},
+		{
+        id: 12,
+		url: "character/Jean.png",
+	title: "Jean",
+	tags: "characters",
+	costsame:"1",
+	cost:"4",
+	type:"anemo",
+	charge:"3",
+	hp:"10"
+	
+		},
+		{
+        id: 12.1,
+		url: "equip/Lands of Dandelion.png",
+	title: "Jean/Lands of Dandelion",
+	tags: "characters/equips",
+	costsame:"1",
+	cost:"4",
+	type:"anemo",
+	charge:"3",
+	hp:"0"
+	
+		},
+		{
+        id: 13,
+		url: "character/Kaeya.png",
+	title: "Kaeya",
+	tags: "characters",
+	costsame:"1",
+	cost:"4",
+	type:"cryo",
+	charge:"2",
+	hp:"10"
+	
+		},
+		{
+        id: 13.1,
+		url: "equip/Cold-Blooded Strike.png",
+	title: "Kaeya/Cold-Blooded Strike",
+	tags: "characters/equips",
+	costsame:"1",
+	cost:"4",
+	type:"cryo",
+	charge:"0",
+	hp:"0"
+	
+		},
+		{
+        id: 14,
+		url: "character/KamisatoAyaka.png",
+	title: "KamisatoAyaka",
+	tags: "characters",
+	costsame:"1",
+	cost:"3",
+	type:"cryo",
+	charge:"3",
+	hp:"10"
+	
+		},
+		{
+        id: 14.1,
+		url: "equip/Kanten Senmyou Blessing.png",
+	title: "KamisatoAyaka/Kanten Senmyou Blessing",
+	tags: "characters/equips",
+	costsame:"1",
+	cost:"2",
+	type:"cryo",
+	charge:"0",
+	hp:"0"
+	
+		},
+		{
+        id: 15,
+		url: "character/Keqing.png",
+	title: "Keqing",
+	tags: "characters",
+	costsame:"1",
+	cost:"4",
+	type:"electro",
+	charge:"3",
+	hp:"10"
+	
+		},
+		{
+        id: 15.1,
+		url: "equip/Thundering Penance.png",
+	title: "Keqing/Thundering Penance",
+	tags: "characters/equips",
+	costsame:"1",
+	cost:"3",
+	type:"electro",
+	charge:"0",
+	hp:"0"
+	
+		},
+		{
+        id: 15.5,
+		url: "character/Klee.png",
+	title: "Klee",
+	tags: "characters",
+	costsame:"1",
+	cost:"3",
+	type:"pyro",
+	charge:"3",
+	hp:"10"
+	
+		},
+		{
+        id: 15.6,
+		url: "equip/Pounding Surprise.png",
+	title: "Klee/Pounding Surprise",
+	tags: "characters/equips",
+	costsame:"1",
+	cost:"3",
+	type:"pyro",
+	charge:"0",
+	hp:"0"
+	
+		},
+		{
+        id: 16,
+		url: "character/Maguu Kenki.png",
+	title: "Maguu Kenki",
+	tags: "characters",
+	costsame:"1",
+	cost:"3",
+	type:"anemo",
+	charge:"3",
+	hp:"10"
+	
+		},
+		{
+        id: 16.1,
+		url: "equip/Transcendent Automaton.png",
+	title: "Maguu Kenki/Transcendent Automaton",
+	tags: "characters/equips",
+	costsame:"1",
+	cost:"3",
+	type:"anemo",
+	charge:"0",
+	hp:"0"
+	
+		},
+		{
+        id: 17,
+		url: "character/Mirror Maiden.png",
+	title: "Mirror Maiden",
+	tags: "characters",
+	costsame:"1",
+	cost:"3",
+	type:"hydro",
+	charge:"2",
+	hp:"10"
+	
+		},
+		{
+        id: 17.1,
+		url: "equip/Mirror Cage.png",
+	title: "Mirror Maiden/Mirror Cage",
+	tags: "characters/equips",
+	costsame:"1",
+	cost:"4",
+	type:"hydro",
+	charge:"0",
+	hp:"0"
+	
+		},
+		{
+        id: 18,
+		url: "character/Mona.png",
+	title: "Mona",
+	tags: "characters",
+	costsame:"1",
+	cost:"3",
+	type:"hydro",
+	charge:"3",
+	hp:"10"
+	
+		},
+		{
+        id: 18.1,
+		url: "equip/Prophecy of Submersion.png",
+	title: "Mona/Prophecy of Submersion",
+	tags: "characters/equips",
+	costsame:"1",
+	cost:"3",
+	type:"hydro",
+	charge:"3",
+	hp:"0"
+	
+		},
+		{
+        id: 19,
+		url: "character/Ningguang.png",
+	title: "Ningguang",
+	tags: "characters",
+	costsame:"1",
+	cost:"3",
+	type:"geo",
+	charge:"3",
+	hp:"10"
+	
+		},
+		{
+        id: 19.1,
+		url: "equip/Strategic Reserve.png",
+	title: "Ningguang/Strategic Reserve",
+	tags: "characters/equips",
+	costsame:"1",
+	cost:"4",
+	type:"geo",
+	charge:"0",
+	hp:"0"
+	
+		},
+		{
+        id: 20,
+		url: "character/Noelle.png",
+	title: "Noelle",
+	tags: "characters",
+	costsame:"1",
+	cost:"4",
+	type:"geo",
+	charge:"2",
+	hp:"10"
+	
+		},
+		{
+        id: 20.1,
+		url: "equip/I Got Your Back.png",
+	title: "Noelle/I Got Your Back",
+	tags: "characters/equips",
+	costsame:"1",
+	cost:"3",
+	type:"geo",
+	charge:"0",
+	hp:"0"
+	
+		},
+		{
+        id: 21,
+		url: "character/Razor.png",
+	title: "Razor",
+	tags: "characters",
+	costsame:"1",
+	cost:"3",
+	type:"electro",
+	charge:"3",
+	hp:"10"
+	
+		},
+		{
+        id: 21.1,
+		url: "equip/Awakening.png",
+	title: "Razor/Awakening",
+	tags: "characters/equips",
+	costsame:"1",
+	cost:"4",
+	type:"electro",
+	charge:"0",
+	hp:"0"
+	
+		},
+		{
+        id: 22,
+		url: "character/Rhodeia of Loch.png",
+	title: "Rhodeia of Loch",
+	tags: "characters",
+	costsame:"1",
+	cost:"3",
+	type:"hydro",
+	charge:"3",
+	hp:"10"
+	
+		},
+		{
+        id: 22.1,
+		url: "equip/Streaming Surge.png",
+	title: "Rhodeia of Loch/Streaming Surge",
+	tags: "characters/equips",
+	costsame:"1",
+	cost:"4",
+	type:"hydro",
+	charge:"3",
+	hp:"0"
+	
+		},
+		{
+        id: 23,
+		url: "character/Stonehide Lawachurl.png",
+	title: "Stonehide Lawachurl",
+	tags: "characters",
+	costsame:"1",
+	cost:"3",
+	type:"geo",
+	charge:"2",
+	hp:"8"
+	
+		},
+		{
+        id: 23.1,
+		url: "equip/Stonehide Reforged.png",
+	title: "Stonehide Lawachurl/Stonehide Reforged",
+	tags: "characters/equips",
+	costsame:"4",
+	cost:"2",
+	type:"geo",
+	hp:"0"
+	
+		},
+		{
+        id: 24,
+		url: "character/Sucrose.png",
+	title: "Sucrose",
+	tags: "characters",
+	costsame:"1",
+	cost:"3",
+	type:"anemo",
+	charge:"2",
+	hp:"10"
+	
+		},
+		{
+        id: 24.1,
+		url: "equip/Chaotic Entropy.png",
+	title: "Sucrose/Chaotic Entropy",
+	tags: "characters/equips",
+	costsame:"1",
+	cost:"3",
+	type:"anemo",
+	charge:"2",
+	hp:"0"
+	
+		},
+		{
+        id: 25,
+		url: "character/Xiangling.png",
+	title: "Xiangling",
+	tags: "characters",
+	costsame:"1",
+	cost:"4",
+	type:"pyro",
+	charge:"2",
+	hp:"10"
+	
+		},
+		{
+        id: 25.1,
+		url: "equip/Crossfire.png",
+	title: "Xiangling/Crossfire",
+	tags: "characters/equips",
+	costsame:"1",
+	cost:"4",
+	type:"pyro",
+	charge:"0",
+	hp:"0"
+	
+		},
+		{
+        id: 26,
+		url: "character/Xingqiu.png",
+	title: "Xingqiu",
+	tags: "characters",
+	costsame:"1",
+	cost:"3",
+	type:"hydro",
+	charge:"2",
+	hp:"10"
+	
+		},
+		{
+        id: 26.1,
+		url: "equip/The Scent Remained.png",
+	title: "Xingqiu/The Scent Remained",
+	tags: "characters/equips",
+	costsame:"1",
+	cost:"4",
+	type:"hydro",
+	charge:"0",
+	hp:"0"
+		},
+		{
+        id: 27,
+		url: "character/Yoimiya.png",
+	title: "Yoimiya",
+	tags: "characters",
+	costsame:"1",
+	cost:"4",
+	type:"pyro",
+	charge:"3",
+	hp:"10"
+	
+		},
+		{
+        id: 27.1,
+		url: "equip/Naganohara Meteor Swarm.png",
+	title: "Yoimiya/Naganohara Meteor Swarm",
+	tags: "characters/equips",
+	costsame:"1",
+	cost:"2",
+	type:"pyro",
+	charge:"0",
+	hp:"0"
+	
+		},		
+		{
+		id: 101,
 		url: "equip/Adventurer's Bandana.png",
 	title: "Adventurer's Bandana",
 	tags: "equips,artifacts",
@@ -378,17 +1070,700 @@ for (var i = 0; i < cardImages.length; i++) {
 	charge:"0"
 },
 {
-		id: 5,
+        id: 102,
+		url: "equip/Exile's Circlet.png",
+	title: "Exile's Circlet",
+	tags: "equips,artifacts",
+	costsame:"0",
+	cost:"2",
+	type:"none",
+	charge:"0",
+	hp:"0"
+	
+		},		
+		{
+        id: 103,
+		url: "equip/Gambler's Earrings.png",
+	title: "Gambler's Earrings",
+	tags: "equips,artifacts",
+	costsame:"0",
+	cost:"1",
+	type:"none",
+	charge:"0",
+	hp:"0"
+	
+		},
+		{
+        id: 104,
+		url: "equip/Instructor's Cap.png",
+	title: "Instructor's Cap",
+	tags: "equips,artifacts",
+	costsame:"1",
+	cost:"2",
+	type:"none",
+	charge:"0",
+	hp:"0"
+	
+		},
+		{
+        id: 105,
+		url: "equip/Lucky Dog's Silver Circlet.png",
+	title: "Lucky Dog's Silver Circlet",
+	tags: "equips,artifacts",
+	costsame:"0",
+	cost:"2",
+	type:"none",
+	charge:"0",
+	hp:"0"
+	
+		},
+		{
+        id: 106,
+		url: "equip/Traveling Doctor's Handkerchief.png",
+	title: "Traveling Doctor's Handkerchief",
+	tags: "equips,artifacts",
+	costsame:"1",
+	cost:"2",
+	type:"none",
+	charge:"0",
+	hp:"0"
+	
+		},
+		{
+        id: 120,
+		url: "equip/Mask of Solitude Basalt.png",
+	title: "Mask of Solitude Basalt",
+	tags: "equips,artifacts",
+	costsame:"1",
+	cost:"2",
+	type:"none",
+	charge:"0",
+	hp:"0"
+	
+		},
+		{
+        id: 121,
+		url: "equip/Archaic Petra.png",
+	title: "Archaic Petra",
+	tags: "equips,artifacts",
+	costsame:"1",
+	cost:"3",
+	type:"none",
+	charge:"0",
+	hp:"0"
+	
+		},
+	
+		{
+        id: 122,
+		url: "equip/Laurel Coronet.png",
+	title: "Laurel Coronet",
+	tags: "equips,artifacts",
+	costsame:"1",
+	cost:"2",
+	type:"none",
+	charge:"0",
+	hp:"0"
+	
+		},
+		{
+        id: 123,
+		url: "equip/Deepwood Memories.png",
+	title: "Deepwood Memories",
+	tags: "equips,artifacts",
+	costsame:"1",
+	cost:"3",
+	type:"none",
+	charge:"0",
+	hp:"0"
+	
+		},
+		{
+        id: 124,
+		url: "equip/Wine-Stained Tricorne.png",
+	title: "Wine-Stained Tricorne",
+	tags: "equips,artifacts",
+	costsame:"1",
+	cost:"2",
+	type:"none",
+	charge:"0",
+	hp:"0"
+	
+		},
+		{
+        id: 125,
+		url: "equip/Heart of Depth.png",
+	title: "Heart of Depth",
+	tags: "equips,artifacts",
+	costsame:"1",
+	cost:"3",
+	type:"none",
+	charge:"0",
+	hp:"0"
+	
+		},
+		{
+        id: 126,
+		url: "equip/Broken Rime's Echo.png",
+	title: "Broken Rime's Echo",
+	tags: "equips,artifacts",
+	costsame:"1",
+	cost:"2",
+	type:"none",
+	charge:"0",
+	hp:"0"
+	
+		},
+		{
+        id: 127,
+		url: "equip/Blizzard Strayer.png",
+	title: "Blizzard Strayer",
+	tags: "equips,artifacts",
+	costsame:"1",
+	cost:"3",
+	type:"none",
+	charge:"0",
+	hp:"0"
+	
+		},
+		{
+        id: 128,
+		url: "equip/Witch's Scorching Hat.png",
+	title: "Witch's Scorching Hat",
+	tags: "equips,artifacts",
+	costsame:"1",
+	cost:"2",
+	type:"none",
+	charge:"0",
+	hp:"0"
+	
+		},
+		{
+        id: 129,
+		url: "equip/Crimson Witch of Flames.png",
+	title: "Crimson Witch of Flames",
+	tags: "equips,artifacts",
+	costsame:"1",
+	cost:"3",
+	type:"none",
+	charge:"0",
+	hp:"0"
+	
+		},
+		{
+        id: 130,
+		url: "equip/Viridescent Venerer's Diadem.png",
+	title: "Viridescent Venerer's Diadem",
+	tags: "equips,artifacts",
+	costsame:"1",
+	cost:"2",
+	type:"none",
+	charge:"0",
+	hp:"0"
+	
+		},
+		{
+        id: 131,
+		url: "equip/Viridescent Venerer.png",
+	title: "Viridescent Venerer",
+	tags: "equips,artifacts",
+	costsame:"1",
+	cost:"3",
+	type:"none",
+	charge:"0",
+	hp:"0"
+	
+		},
+	
+		{
+        id: 150,
+		url: "equip/Traveler's Handy Sword.png",
+	title: "Traveler's Handy Sword",
+	tags: "equips,weapons",
+	costsame:"1",
+	cost:"2",
+	type:"none",
+	charge:"0",
+	hp:"0"
+		},
+		{
+        id: 151,
 		url: "equip/Aquila Favonia.png",
 	title: "Aquila Favonia",
 	tags: "equips,weapons",
+	costsame:"1",
 	cost:"3",
+	type:"none",
+	charge:"0",
+	hp:"0"
+		},
+		{
+        id: 152,
+		url: "equip/Sacrificial Sword.png",
+	title: "Sacrificial Sword",
+	tags: "equips,weapons",
+	costsame:"1",
+	cost:"3",
+	type:"none",
+	charge:"0",
+	hp:"0"
+		},
+		{
+        id: 153,
+		url: "equip/White Iron Greatsword.png",
+	title: "White Iron Greatsword",
+	tags: "equips,weapons",
+	costsame:"1",
+	cost:"2",
+	type:"none",
+	charge:"0",
+	hp:"0"
+		},
+		{
+        id: 154,
+		url: "equip/Wolf's Gravestone.png",
+	title: "Wolf's Gravestone",
+	tags: "equips,weapons",
+	costsame:"1",
+	cost:"3",
+	type:"none",
+	charge:"0",
+	hp:"0"
+		},
+		{
+        id: 155,
+		url: "equip/Sacrificial Greatsword.png",
+	title: "Sacrificial Greatsword",
+	tags: "equips,weapons",
+	costsame:"1",
+	cost:"3",
+	type:"none",
+	charge:"0",
+	hp:"0"
+		},
+		{
+        id: 156,
+		url: "equip/White Tassel.png",
+	title: "White Tassel",
+	tags: "equips,weapons",
+	costsame:"1",
+	cost:"2",
+	type:"none",
+	charge:"0",
+	hp:"0"
+		},
+			{
+        id: 157,
+		url: "equip/Skyward Spine.png",
+	title: "Skyward Spine",
+	tags: "equips,weapons",
+	costsame:"1",
+	cost:"3",
+	type:"none",
+	charge:"0",
+	hp:"0"
+		},
+		{
+        id: 158,
+		url: "equip/Lithic Spear.png",
+	title: "Lithic Spear",
+	tags: "equips,weapons",
+	costsame:"1",
+	cost:"3",
+	type:"none",
+	charge:"0",
+	hp:"0"
+		},
+	
+		{
+        id: 159,
+		url: "equip/Raven Bow.png",
+	title: "Raven Bow",
+	tags: "equips,weapons",
+	costsame:"1",
+	cost:"2",
+	type:"none",
+	charge:"0",
+	hp:"0"
+		},
+		{
+        id: 160,
+		url: "equip/Skyward Harp.png",
+	title: "Skyward Harp",
+	tags: "equips,weapons",
+	costsame:"1",
+	cost:"3",
+	type:"none",
+	charge:"0",
+	hp:"0"
+		},
+		{
+        id: 161,
+		url: "equip/Sacrificial Bow.png",
+	title: "Sacrificial Bow",
+	tags: "equips,weapons",
+	costsame:"1",
+	cost:"3",
+	type:"none",
+	charge:"0",
+	hp:"0"
+		},
+		{
+        id: 162,
+		url: "equip/Magic Guide.png",
+	title: "Magic Guide",
+	tags: "equips,weapons",
+	costsame:"1",
+	cost:"2",
+	type:"none",
+	charge:"0",
+	hp:"0"
+		},
+		{
+        id: 163,
+		url: "equip/Skyward Atlas.png",
+	title: "Skyward Atlas",
+	tags: "equips,weapons",
+	costsame:"1",
+	cost:"3",
+	type:"none",
+	charge:"0",
+	hp:"0"
+		},
+		{
+        id: 164,
+		url: "equip/Sacrificial Fragments.png",
+	title: "Sacrificial Fragments",
+	tags: "equips,weapons",
+	costsame:"1",
+	cost:"3",
+	type:"none",
+	charge:"0",
+	hp:"0"
+		},
+		{
+		id: 200,
+		url: "event/Northern Smoked Chicken.png",
+	title: "Northern Smoked Chicken",
+	tags: "events/foods",
+	cost:"0",
 	costsame:"1",
 	type:"none",
 	charge:"0"
-},
-{
-		id: 6,
+		},
+		{
+		id: 201,
+		url: "event/Sweet Madame.png",
+	title: "Sweet Madame",
+	tags: "events/foods",
+	cost:"0",
+	costsame:"1",
+	type:"none",
+	charge:"0"
+		},
+		{
+		id: 202,
+		url: "event/Jueyun Guoba.png",
+	title: "Jueyun Guoba",
+	tags: "events/foods",
+	cost:"0",
+	costsame:"1",
+	type:"none",
+	charge:"0"
+		},
+		{
+		id: 203,
+		url: "event/Lotus Flower Crisp.png",
+	title: "Lotus Flower Crisp",
+	tags: "events/foods",
+	cost:"1",
+	costsame:"1",
+	type:"none",
+	charge:"0"
+		},
+		{
+		id: 204,
+		url: "event/Mondstadt Hash Brown.png",
+	title: "",
+	tags: "events/foods",
+	cost:"1",
+	costsame:"1",
+	type:"none",
+	charge:"0"
+		},
+		{
+		id: 205,
+		url: "event/Mushroom Pizza.png",
+	title: "Mushroom Pizza",
+	tags: "events/foods",
+	cost:"1",
+	costsame:"1",
+	type:"none",
+	charge:"0"
+		},
+		{
+		id: 206,
+		url: "event/Minty Meat Rolls.png",
+	title: "Minty Meat Rolls",
+	tags: "events/foods",
+	cost:"1",
+	costsame:"1",
+	type:"none",
+	charge:"0"
+		},
+		{
+		id: 207,
+		url: "event/Adeptus' Temptation.png",
+	title: "Adeptus' Temptation",
+	tags: "events/foods",
+	cost:"2",
+	costsame:"0",
+	type:"none",
+	charge:"0"
+		},
+		{
+		id: 230,
+		url: "event/Elemental Resonance Woven Weeds.png",
+	title: "Elemental Resonance Woven Weeds",
+	tags: "events,resonance",
+	cost:"0",
+	costsame:"1",
+	type:"none",
+	charge:"0"
+		},
+		{
+		id: 231,
+		url: "event/Elemental Resonance Sprawling Greenery.png",
+	title: "Elemental Resonance Sprawling Greenery",
+	tags: "events,resonance",
+	cost:"1",
+	costsame:"1",
+	type:"dendro",
+	charge:"0"
+		},
+		{
+		id: 232,
+		url: "event/Elemental Resonance Woven Stone.png",
+	title: "Elemental Resonance Woven Stone",
+	tags: "events,resonance",
+	cost:"0",
+	costsame:"1",
+	type:"none",
+	charge:"0"
+		},
+		{
+		id: 233,
+		url: "event/Elemental Resonance Enduring Rock.png",
+	title: "Elemental Resonance Enduring Rock",
+	tags: "events,resonance",
+	cost:"1",
+	costsame:"1",
+	type:"geo",
+	charge:"0"
+		},
+		{
+		id: 234,
+		url: "event/Elemental Resonance Woven Winds.png",
+	title: "Elemental Resonance Woven Winds",
+	tags: "events,resonance",
+	cost:"0",
+	costsame:"1",
+	type:"none",
+	charge:"0"
+		},
+		{
+		id: 235,
+		url: "event/Elemental Resonance Impetuous Winds.png",
+	title: "Elemental Resonance Impetuous Winds",
+	tags: "events,resonance",
+	cost:"1",
+	costsame:"1",
+	type:"anemo",
+	charge:"0"
+		},
+		{
+		id: 236,
+		url: "event/Elemental Resonance Woven Thunder.png",
+	title: "Elemental Resonance Woven Thunder",
+	tags: "events,resonance",
+	cost:"0",
+	costsame:"1",
+	type:"none",
+	charge:"0"
+		},
+		{
+		id: 237,
+		url: "event/Elemental Resonance High Voltage.png",
+	title: "Elemental Resonance High Voltage",
+	tags: "events,resonance",
+	cost:"1",
+	costsame:"1",
+	type:"electro",
+	charge:"0"
+		},
+		{
+		id: 238,
+		url: "event/Elemental Resonance Woven Flames.png",
+	title: "Elemental Resonance Woven Flames",
+	tags: "events,resonance",
+	cost:"0",
+	costsame:"1",
+	type:"none",
+	charge:"0"
+		},
+		{
+		id: 239,
+		url: "event/Elemental Resonance Fervent Flames.png",
+	title: "Elemental Resonance Fervent Flames",
+	tags: "events,resonance",
+	cost:"1",
+	costsame:"1",
+	type:"pyro",
+	charge:"0"
+		},
+		{
+		id: 240,
+		url: "event/Elemental Resonance Woven Waters.png",
+	title: "Elemental Resonance Woven Waters",
+	tags: "events,resonance",
+	cost:"0",
+	costsame:"1",
+	type:"none",
+	charge:"0"
+		},
+		{
+		id: 241,
+		url: "event/Elemental Resonance Soothing Water.png",
+	title: "Elemental Resonance Soothing Water",
+	tags: "events",
+	cost:"1",
+	costsame:"1",
+	type:"hydro",
+	charge:"0"
+		},
+		{
+		id: 242,
+		url: "event/Elemental Resonance Woven Ice.png",
+	title: "Elemental Resonance Woven Ice",
+	tags: "events",
+	cost:"0",
+	costsame:"1",
+	type:"none",
+	charge:"0"
+		},
+		{
+		id: 243,
+		url: "event/Elemental Resonance Shattering Ice.png",
+	title: "Elemental Resonance Shattering Ice",
+	tags: "events",
+	cost:"1",
+	costsame:"1",
+	type:"cryo",
+	charge:"0"
+		},
+		
+		{
+		id: 270,
+		url: "event/Leave It to Me!.png",
+	title: "Leave It to Me!",
+	tags: "events",
+	cost:"0",
+	costsame:"1",
+	type:"none",
+	charge:"0"
+		},
+		{
+		id: 271,
+		url: "event/I Haven't Lost Yet!.png",
+	title: "I Haven't Lost Yet!",
+	tags: "events",
+	cost:"0",
+	costsame:"1",
+	type:"none",
+	charge:"0"
+		},
+		{
+		id: 272,
+		url: "event/Toss-Up.png",
+	title: "Toss-Up",
+	tags: "events",
+	cost:"0",
+	costsame:"1",
+	type:"none",
+	charge:"0"
+		},
+		{
+		id: 273,
+		url: "event/Changing Shifts.png",
+	title: "Changing Shifts",
+	tags: "events",
+	cost:"0",
+	costsame:"1",
+	type:"none",
+	charge:"0"
+		},
+		{
+		id: 274,
+		url: "event/Master of Weaponry.png",
+	title: "Master of Weaponry",
+	tags: "events",
+	cost:"0",
+	costsame:"1",
+	type:"none",
+	charge:"0"
+		},
+		{
+		id: 275,
+		url: "event/Blessing of the Divine Relic's Installation.png",
+	title: "Blessing of the Divine Relic's Installation",
+	tags: "events",
+	cost:"0",
+	costsame:"1",
+	type:"none",
+	charge:"0"
+		},
+		{
+		id: 276,
+		url: "event/Strategize.png",
+	title: "Strategize",
+	tags: "events",
+	cost:"1",
+	costsame:"1",
+	type:"none",
+	charge:"0"
+		},
+		{
+		id: 277,
+		url: "event/When the Crane Returned.png",
+	title: "When the Crane Returned",
+	tags: "events",
+	cost:"1",
+	costsame:"1",
+	type:"none",
+	charge:"0"
+		},
+		{
+		id: 278,
+		url: "event/Calx's Arts.png",
+	title: "Calx's Arts",
+	tags: "events",
+	cost:"1",
+	costsame:"1",
+	type:"none",
+	charge:"0"
+		},
+		{
+		id: 279,
+		url: "event/Quick Knit.png",
+	title: "Quick Knit",
+	tags: "events",
+	cost:"1",
+	costsame:"1",
+	type:"none",
+	charge:"0"
+		},
+		{
+		id: 280,
 		url: "event/Abyssal Summons.png",
 	title: "Abyssal Summons",
 	tags: "events",
@@ -396,81 +1771,51 @@ for (var i = 0; i < cardImages.length; i++) {
 	costsame:"1",
 	type:"none",
 	charge:"0"
-},
-{
-		id: 7,
-		url: "event/Adeptus' Temptation.png",
-	title: "Adeptus' Temptation",
-	tags: "events,foods",
-	cost:"1",
-	costsame:"1",
-	type:"none",
-	charge:"0"
-},
-{
-		id: 8,
-		url: "support/Chang the Ninth.png",
-	title: "Chang the Ninth",
-	tags: "supports",
-	cost:"1",
-	costsame:"1",
-	type:"none",
-	charge:"0"
-},
-{
-		id: "9",
-		url: "support/Chef Mao.png",
-	title: "Chef Mao",
-	tags: "supports",
-	cost:"1",
-	costsame:"1",
-	type:"none",
-	charge:"0"
-},
-{
-		id: "10",
-		url: "support/Dawn Winery.png",
-	title: "Dawn Winery",
-	tags: "supports",
+		},
+		{
+		id: 281,
+		url: "event/The Bestest Travel Companion!.png",
+	title: "The Bestest Travel Companion!",
+	tags: "events",
 	cost:"2",
-	costsame:"1",
+	costsame:"0",
 	type:"none",
 	charge:"0"
-},
-{
-		id: "11",
-		url: "support/Ellin.png",
-	title: "Ellin",
-	tags: "supports",
+		},
+		{
+		id: 282,
+		url: "event/Starsigns.png",
+	title: "Starsigns",
+	tags: "events",
 	cost:"2",
+	costsame:"0",
+	type:"none",
+	charge:"0"
+		},
+		{
+		id: 283,
+		url: "event/Send Off.png",
+	title: "Send Off",
+	tags: "events",
+	cost:"2",
+	costsame:"0",
+	type:"none",
+	charge:"0"
+		},
+		{
+		id: 27,
+		url: "support/.png",
+	title: "",
+	tags: "supports",
+	cost:"",
 	costsame:"1",
 	type:"none",
 	charge:"0"
-},
-{
-		id: "12",
-		url: "equip/Archaic Petra.png",
-	title: "Archaic Petra",
-	tags: "equips,artifacts",
-	cost:"3",
-	costsame:"1",
-	type:"none",
-	charge:"0"
-},
-{
-		id: "13",
-		url: "equip/Awakening.png",
-	title: "Awakening",
-	tags: "equips,characters",
-	cost:"4",
-	costsame:"1",
-	type:"electro",
-	charge:"0"
-},
+		},
+		
 
-
-];
-
+];  </script>
+  <script>
 
     // Create the cards
     for (var i = 0; i < cards.length; i++) {
@@ -530,6 +1875,7 @@ for (var i = 0; i < cardImages.length; i++) {
       
       costEl.style.position = "absolute";
 	  costEl.style.backgroundSize = "100% 100%";
+	  costNumber.style.fontSize = "17px";
       costEl.style.top = "2px";
       costEl.style.left = "2px";
       costEl.style.width = "40px";
@@ -560,7 +1906,7 @@ for (var i = 0; i < cardImages.length; i++) {
 	  }
       hpEl.style.backgroundSize = "100% 100%";
 	  hpEl.style.backgroundImage = "url('hp.png')";
-	  hpNumber.style.fontSize = "15px";
+	  hpNumber.style.fontSize = "17px";
       hpNumber.style.position = "absolute";
       hpNumber.style.top = "50%";
       hpNumber.style.left = "50%";
@@ -588,7 +1934,7 @@ for (var i = 0; i < cardImages.length; i++) {
 	  }
       chargeEl.style.backgroundSize = "100% 100%";
 	  chargeEl.style.backgroundImage = "url('recharge.png')";
-	  chargeNumber.style.fontSize = "15px";
+	  chargeNumber.style.fontSize = "17px";
       chargeNumber.style.position = "absolute";
       chargeNumber.style.top = "50%";
       chargeNumber.style.left = "50%";
@@ -619,16 +1965,13 @@ function filterCardsByCost(cost) {
     // If the filter is empty or the cost of the card matches the filter
     if (!cost || cardCost === cost) {
       // Show the card
-	  console.log("show costfilter");
       costcards[i].style.display = "block";
     }
 	else if(cost === "all"){
-	//console.log("all");
 	costcards[i].style.display = "block";
 	}
 	else {
       // Hide the card
-	  console.log("hidefilter");
       costcards[i].style.display = "none";
     }
   }
@@ -650,16 +1993,13 @@ function filterCardsByType(type) {
     // If the filter is empty or the type of the card matches the filter
     if (!type || cardType === type) {
       // Show the card
-	  console.log("show typefilter");
       typecards[i].style.display = "block";
     }
 	else if(type === "all"){
-	//console.log("all");
 	typecards[i].style.display = "block";
 	}
 	else {
       // Hide the card
-	  console.log("hidefilter");
       typecards[i].style.display = "none";
     }
   }
