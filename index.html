@@ -78,18 +78,15 @@ input:focus::placeholder {
   <body>
 
 
-
-<button onclick="SaveScreenshot()">Take Screenshot</button>
+<button onclick="takeScreenshot()">Save Screenshot</button>
 <button id="transparent-button">Transparent</button>
 <button id="green-button">Toggle Green</button>
-<div id="target-div">
 <div id="screenshot-div">
+<div id="target-div">
   <div id="selected-cards"></div>
-<div id="counter"></div>
+</div></div><div id="counter"></div>
 
-</div></div>
 
-</div>
     <!-- A div to hold the table and make it scroll horizontally -->
     <div class="table-wrapper">
       <!-- A table to display the available images and text -->
@@ -129,9 +126,32 @@ input:focus::placeholder {
 		<option value="hydro">Hydro</option>
     </select>
 </div>
+
+
+
+
   <div id="imageCards"></div>
 
 
+<script src='https://html2canvas.hertzen.com/dist/html2canvas.min.js'></script>
+<script>
+  function takeScreenshot() {
+    // Select the div you want to take a screenshot of
+    var screenshotDiv = document.getElementById("screenshot-div");
+    
+    html2canvas(screenshotDiv).then(canvas => {
+      // Create an image from the canvas
+      var screenshotImg = new Image();
+      screenshotImg.src = canvas.toDataURL();
+      
+      // Create a link to download the image
+      var downloadLink = document.createElement("a");
+      downloadLink.download = "screenshot.png";
+      downloadLink.href = screenshotImg.src;
+      downloadLink.click();
+    });
+  }
+</script>
 
 <script>
 document.getElementById("filter-title").addEventListener("focus", function(){
@@ -200,25 +220,7 @@ var filters = document.getElementById("filters");
     });
   </script>
 
-<script src='https://html2canvas.hertzen.com/dist/html2canvas.min.js'></script>
-<script>
-  function takeScreenshot() {
-    // Select the div you want to take a screenshot of
-    var screenshotDiv = document.getElementById("screenshot-div");
-    
-    html2canvas(screenshotDiv).then(canvas => {
-      // Create an image from the canvas
-      var screenshotImg = new Image();
-      screenshotImg.src = canvas.toDataURL();
-      
-      // Create a link to download the image
-      var downloadLink = document.createElement("a");
-      downloadLink.download = "screenshot.png";
-      downloadLink.href = screenshotImg.src;
-      downloadLink.click();
-    });
-  }
-</script>
+
 
 
 
@@ -1803,7 +1805,208 @@ for (var i = 0; i < cardImages.length; i++) {
 	charge:"0"
 		},
 		{
-		id: 27,
+		id: 310,
+		url: "support/Chang the Ninth.png",
+	title: "Chang the Ninth",
+	tags: "supports",
+	cost:"0",
+	costsame:"1",
+	type:"none",
+	charge:"0"
+		},
+		{
+		id: 311,
+		url: "support/Liben.png",
+	title: "Liben",
+	tags: "supports",
+	cost:"0",
+	costsame:"1",
+	type:"none",
+	charge:"0"
+		},
+		{
+		id: 312,
+		url: "support/Timmie.png",
+	title: "Timmie",
+	tags: "supports",
+	cost:"0",
+	costsame:"1",
+	type:"none",
+	charge:"0"
+		},
+		{
+		id: 313,
+		url: "support/Liu Su.png",
+	title: "Liu Su",
+	tags: "supports",
+	cost:"1",
+	costsame:"1",
+	type:"none",
+	charge:"0"
+		},
+		{
+		id: 314,
+		url: "support/Chef Mao.png",
+	title: "Chef Mao",
+	tags: "supports",
+	cost:"1",
+	costsame:"1",
+	type:"none",
+	charge:"0"
+		},
+		{
+		id: 315,
+		url: "support/Jade Chamber.png",
+	title: "Jade Chamber",
+	tags: "supports",
+	cost:"1",
+	costsame:"1",
+	type:"none",
+	charge:"0"
+		},
+		{
+		id: 316,
+		url: "support/Knights of Favonius Library.png",
+	title: "Knights of Favonius Library",
+	tags: "supports",
+	cost:"1",
+	costsame:"1",
+	type:"none",
+	charge:"0"
+		},
+		{
+		id: 317,
+		url: "support/NRE.png",
+	title: "NRE",
+	tags: "supports",
+	cost:"2",
+	costsame:"0",
+	type:"none",
+	charge:"0"
+		},
+		{
+		id: 317.5,
+		url: "support/Parametric Transformer.png",
+	title: "Parametric Transformer",
+	tags: "supports",
+	cost:"2",
+	costsame:"0",
+	type:"none",
+	charge:"0"
+		},
+	
+		{
+		id: 318,
+		url: "support/Iron Tongue Tian.png",
+	title: "Iron Tongue Tian",
+	tags: "supports",
+	cost:"2",
+	costsame:"0",
+	type:"none",
+	charge:"0"
+		},
+		{
+		id: 319,
+		url: "support/Katheryne.png",
+	title: "Katheryne",
+	tags: "supports",
+	cost:"2",
+	costsame:"0",
+	type:"none",
+	charge:"0"
+		},
+		{
+		id: 320,
+		url: "support/Ellin.png",
+	title: "Ellin",
+	tags: "supports",
+	cost:"2",
+	costsame:"1",
+	type:"none",
+	charge:"0"
+		},
+		{
+		id: 321,
+		url: "support/Tubby.png",
+	title: "Tubby",
+	tags: "supports",
+	cost:"2",
+	costsame:"1",
+	type:"none",
+	charge:"0"
+		},
+		{
+		id: 322,
+		url: "support/Favonius Cathedral.png",
+	title: "Favonius Cathedral",
+	tags: "supports",
+	cost:"2",
+	costsame:"1",
+	type:"none",
+	charge:"0"
+		},
+		{
+		id: 323,
+		url: "support/Wangshu Inn.png",
+	title: "Wangshu Inn",
+	tags: "supports",
+	cost:"2",
+	costsame:"1",
+	type:"none",
+	charge:"0"
+		},
+		{
+		id: 324,
+		url: "support/Dawn Winery.png",
+	title: "Dawn Winery",
+	tags: "supports",
+	cost:"2",
+	costsame:"1",
+	type:"none",
+	charge:"0"
+		},
+		{
+		id: 325,
+		url: "support/Liyue Harbor Wharf.png",
+	title: "Liyue Harbor Wharf",
+	tags: "supports",
+	cost:"2",
+	costsame:"1",
+	type:"none",
+	charge:"0"
+		},
+		{
+		id: 326,
+		url: "support/Timaeus.png",
+	title: "Timaeus",
+	tags: "supports",
+	cost:"2",
+	costsame:"1",
+	type:"none",
+	charge:"0"
+		},
+		{
+		id: 327,
+		url: "support/Wagner.png",
+	title: "Wagner",
+	tags: "supports",
+	cost:"2",
+	costsame:"1",
+	type:"none",
+	charge:"0"
+		},
+		{
+		id: 310,
+		url: "support/Paimon.png",
+	title: "Paimon",
+	tags: "supports",
+	cost:"3",
+	costsame:"1",
+	type:"none",
+	charge:"0"
+		},
+		{
+		id: 310,
 		url: "support/.png",
 	title: "",
 	tags: "supports",
@@ -1812,6 +2015,17 @@ for (var i = 0; i < cardImages.length; i++) {
 	type:"none",
 	charge:"0"
 		},
+		{
+		id: 310,
+		url: "support/.png",
+	title: "",
+	tags: "supports",
+	cost:"",
+	costsame:"1",
+	type:"none",
+	charge:"0"
+		},
+		
 		
 
 ];  </script>
